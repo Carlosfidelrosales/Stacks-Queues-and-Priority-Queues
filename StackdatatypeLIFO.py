@@ -17,5 +17,9 @@ class Queue:
     def dequeue(catalog):
         return catalog._elements.popleft()
 
+class Stack(Queue):
+    def dequeue(self):
+        return self._elements.pop()
+
 
     
