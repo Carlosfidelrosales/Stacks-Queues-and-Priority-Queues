@@ -17,11 +17,11 @@ class Queue:
     def dequeue(self):
         return self._elements.popleft()
 
-fifo = Queue()
-fifo.enqueue("First in Line")
-fifo.enqueue("Second in Line")
-fifo.enqueue("Third in Line")
+fifo = Queue("First in Line", "Second in Line", "Third in Line")
+print(len(fifo))
 
-print(fifo.dequeue())
-print(fifo.dequeue())
-print(fifo.dequeue())
+
+for element in fifo:
+    print(element)
+
+print(len(fifo))   
