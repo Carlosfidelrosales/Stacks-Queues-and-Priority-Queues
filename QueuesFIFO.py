@@ -14,11 +14,3 @@ fifo = Queue()
 fifo.enqueue("First in Line")
 fifo.enqueue("Second in Line")
 fifo.enqueue("Third in Line")
-
-
-
-print(fifo.dequeue())
-
-print(fifo.dequeue())
-
-print(fifo.dequeue())
