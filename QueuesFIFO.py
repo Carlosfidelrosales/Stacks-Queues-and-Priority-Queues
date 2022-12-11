@@ -1,27 +1,27 @@
 from collections import deque
 
 class Queue:
-    def __init__(self, *elements):
-        self._elements = deque(elements)
+    def __init__(catalog, *elements):
+        catalog._elements = deque(elements)
 
-    def __len__(self):
-        return len(self._elements)
+    def __len__(catalog):
+        return len(catalog._elements)
 
-    def __iter__(self):
-        while len(self) > 0:
-            yield self.dequeue()
+    def __iter__(catalog):
+        while len(catalog) > 0:
+            yield catalog.dequeue()
 
-    def enqueue(self, element):
-        self._elements.append(element)
+    def enqueue(catalog, element):
+        catalog._elements.append(element)
 
-    def dequeue(self):
-        return self._elements.popleft()
+    def dequeue(catalog):
+        return catalog._elements.popleft()
 
-fifo = Queue("First in Line", "Second in Line", "Third in Line")
-print(len(fifo))
+FIFO = Queue("First in Line", "Second in Line", "Third in Line")
+print(len(FIFO))
 
 
-for element in fifo:
+for element in FIFO:
     print(element)
 
-print(len(fifo))   
+print(len(FIFO))   
