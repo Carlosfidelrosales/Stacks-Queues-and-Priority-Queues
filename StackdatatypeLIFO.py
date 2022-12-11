@@ -22,4 +22,10 @@ class Stack(Queue):
         return self._elements.pop()
 
 
+print("\nList of Kitchen Utensils when washing the dishes. Using LAST IN FIRST OUT QUEUE. \n")
+LIFO = Stack("- Plate", "- Spoon", "- Fork", "- Glass", "- Saucer")
+
+for element in LIFO:
+    print(element)
+
     
