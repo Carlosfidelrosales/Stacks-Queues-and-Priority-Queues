@@ -11,4 +11,11 @@ class Queue:
         while len(catalog) > 0:
             yield catalog.dequeue()
 
+    def enqueue(catalog, element):
+        catalog._elements.append(element)
+
+    def dequeue(catalog):
+        return catalog._elements.popleft()
+
+
     
