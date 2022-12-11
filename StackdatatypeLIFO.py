@@ -23,9 +23,27 @@ class Stack(Queue):
 
 
 print("\nList of Kitchen Utensils when washing the dishes. Using LAST IN FIRST OUT QUEUE. \n")
-LIFO = Stack("- Plate", "- Spoon", "- Fork", "- Glass", "- Saucer")
+LIFO = Stack("- Plate\n\n", "- Spoon", "- Fork", "- Glass", "- Saucer")
 
 for element in LIFO:
     print(element)
+
+
+# This can be also a way on printing the items in reverse order
+LIFO = []
+
+LIFO.append("- Plate")
+LIFO.append("- Spoon")
+LIFO.append("- Fork")
+LIFO.append("- Glass")
+LIFO.append("- Saucer")
+
+
+print("\nList of Kitchen Utensils when washing the dishes. Using LAST IN FIRST OUT QUEUE. \n")
+print(LIFO.pop())
+print(LIFO.pop())
+print(LIFO.pop())
+print(LIFO.pop())
+print(LIFO.pop())
 
     
