@@ -23,7 +23,7 @@ alert = PriorityQueue()
 alert.enqueue_with_priority(IMPORTANT, "Flesh Wound Injury")
 alert.enqueue_with_priority(NEUTRAL, "Minor Injury")
 alert.enqueue_with_priority(CRITICAL, "Acute Danger")
-alert.enqueue_with_priority(IMPORTANT, "Dislocations on the bones")
+alert.enqueue_with_priority(IMPORTANT, "Dislocation on the bones")
 
 # print(alert.dequeue())
 # print("------------------------------------------------------------\n")
