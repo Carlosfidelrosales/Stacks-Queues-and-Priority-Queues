@@ -16,5 +16,18 @@ class PriorityQueue:
     def dequeue(catalog):
         return heappop(catalog._elements)[-1]
 
+CRITICAL = 3
+IMPORTANT = 2 
+NEUTRAL = 1 
+    
+alert = PriorityQueue()
+alert.enqueue_with_priority(IMPORTANT, "Flesh Wound Injury")
+alert.enqueue_with_priority(NEUTRAL, "Minor Injury")
+alert.enqueue_with_priority(CRITICAL, "Acute Danger")
+alert.enqueue_with_priority(IMPORTANT, "Dislocation on the bones")
 
-
+print("This is the list of priorities that will be needed for the hospitals.")
+print("\nFirst is " + alert.dequeue())
+print("Second is " + alert.dequeue())
+print("Third is " + alert.dequeue())
+print("Fourth is " + alert.dequeue())
