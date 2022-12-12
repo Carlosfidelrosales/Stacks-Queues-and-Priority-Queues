@@ -25,6 +25,23 @@ alert.enqueue_with_priority(NEUTRAL, "Minor Injury")
 alert.enqueue_with_priority(CRITICAL, "Acute Danger")
 alert.enqueue_with_priority(IMPORTANT, "Dislocations on the bones")
 
+# print(alert.dequeue())
+# print("------------------------------------------------------------\n")
+
+class PriorityQueue:
+    def __init__(catalog):
+        catalog._elements = []
+
+    def enqueue_with_priority(catalog, priority, value):
+        heappush(catalog._elements, (-priority, value))
+
+    def dequeue(catalog):
+        return heappop(catalog._elements)[1]
+
+# push critical messages ahead of important and neutral ones
+print(alert.dequeue())
+print(alert.dequeue())
+print(alert.dequeue())
 print(alert.dequeue())
 
 
