@@ -13,15 +13,17 @@ class PriorityQueue:
     def dequeue(catalog):
         return heappop(catalog._elements)
 
-CRITICAL = 3
+# Defined three priority levels: critical, important, and neutral. Next, instantiated a priority queue and used it to enqueue a few messages with those priorities. However, instead of dequeuing the message with the highest priority, it got a tuple corresponding to the message with the lowest priority.
+
+CRITICAL = 1
 IMPORTANT = 2
-NEUTRAL = 1
+NEUTRAL = 3
 
 alert = PriorityQueue()
-alert.enqueue_with_priority(IMPORTANT, "Windshield wipers turned on")
-alert.enqueue_with_priority(NEUTRAL, "Radio station tuned in")
-alert.enqueue_with_priority(CRITICAL, "Brake pedal depressed")
-alert.enqueue_with_priority(CRITICAL, "Hazard lights turned on")
+alert.enqueue_with_priority(IMPORTANT, "Flesh Wound Injury")
+alert.enqueue_with_priority(NEUTRAL, "Minor Injury")
+alert.enqueue_with_priority(CRITICAL, "Acute Danger")
+alert.enqueue_with_priority(IMPORTANT, "Dislocations on the bones")
 
 print(alert.dequeue())
 
