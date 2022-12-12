@@ -15,3 +15,15 @@ print("These are the following list of countries from the program for applying h
 print(countries)
 print("----------------------------------------------------------------------------------------")
 
+#heappop - always get the first one, while the remaining elements might shuffle a little bit
+from heapq import heappop
+
+print("----------------------------------------------------------------------------------------")
+print("These are the following list of countries from the program for applying heappop method.")
+print(heappop(countries))
+print(heappop(countries))
+print(countries)
+print("----------------------------------------------------------------------------------------")
+
+
+
