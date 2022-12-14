@@ -1,5 +1,7 @@
 from typing import NamedTuple
 import networkx as nx
+from QueuesFIFO import Queue
+from collections import deque
 
 class City(NamedTuple):
     name: str
@@ -28,3 +30,35 @@ def load_graph(filename, node_factory):
         (nodes[name1], nodes[name2], weights)
         for name1, name2, weights in graph.edges(data=True)
     )
+
+
+def shortest_path(graph, source, destination, order_by=None):
+    queue = Queue(source)
+    visited = {source}
+    previous = {}
+    while queue:
+        node = queue.dequeue()
+        neighbors = list(graph.neighbors(node))
+        if order_by:
+            neighbors.sort(key=order_by)
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.enqueue(neighbor)
+                previous[neighbor] = node
+                if neighbor == destination:
+                    return retrace(previous, source, destination)
+
+def retrace(previous, source, destination):
+    path = deque()
+
+    current = destination
+    while current != source:
+        path.appendleft(current)
+        current = previous.get(current)
+        if current is None:
+            return None
+
+    path.appendleft(source)
+    return list(path)
+    
