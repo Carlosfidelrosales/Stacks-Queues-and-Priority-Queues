@@ -2,6 +2,7 @@ from typing import NamedTuple
 import networkx as nx
 from QueuesFIFO import Queue
 from collections import deque
+from StackdatatypeLIFO import Queue, Stack
 
 class City(NamedTuple):
     name: str
@@ -73,8 +74,54 @@ def breadth_first_traverse(graph, source):
                 visited.add(neighbor)
                 queue.enqueue(neighbor)
 
-def breadth_first_search(graph, source, predicate):
+def breadth_first_search(graph, source, predicate, order_by=None):
     for node in breadth_first_traverse(graph, source):
         if predicate(node):
             return node
-    
+    return search(breadth_first_traverse, graph, source, predicate, order_by)
+
+def connected(graph, source, destination):
+    return shortest_path(graph, source, destination) is not None
+
+
+
+
+
+
+
+
+def depth_first_traverse(graph, source, order_by=None):
+    stack = Stack(source)
+    visited = set()
+    while stack:
+        if (node := stack.dequeue()) not in visited:
+            yield node
+            visited.add(node)
+            neighbors = list(graph.neighbors(node))
+            if order_by:
+                neighbors.sort(key=order_by)
+            for neighbor in reversed(neighbors):
+                stack.enqueue(neighbor)
+
+def recursive_depth_first_traverse(graph, source, order_by=None):
+    visited = set()
+
+    def visit(node):
+        yield node
+        visited.add(node)
+        neighbors = list(graph.neighbors(node))
+        if order_by:
+            neighbors.sort(key=order_by)
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                yield from visit(neighbor)
+    return visit(source)
+
+def depth_first_search(graph, source, predicate, order_by=None):
+    return search(depth_first_traverse, graph, source, predicate, order_by)
+
+def search(traverse, graph, source, predicate, order_by=None):
+    for node in traverse(graph, source, order_by):
+        if predicate(node):
+            return node
+
