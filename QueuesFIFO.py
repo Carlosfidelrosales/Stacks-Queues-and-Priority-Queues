@@ -25,13 +25,11 @@ class Queue (IterableMixin):
     def dequeue(catalog):
         return catalog._elements.popleft()
 
-FIFO = Queue("First in Line", "Second in Line", "Third in Line")
-print(len(FIFO))
+# FIFO = Queue("First in Line", "Second in Line", "Third in Line")
+# print(len(FIFO))
 
 
-for element in FIFO:
-    print(element)
+# for element in FIFO:
+#     print(element)
 
-print(len(FIFO))   
-
-
+# print(len(FIFO))
