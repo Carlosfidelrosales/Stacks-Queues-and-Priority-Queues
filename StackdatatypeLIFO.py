@@ -1,4 +1,9 @@
 from collections import deque
+from heapq import heappush, heappop, heapify
+from itertools import count
+from dataclasses import dataclass
+from itertools import count
+from typing import Any
 
 class IterableMixin:
     def __len__(catalog):
@@ -26,8 +31,36 @@ class Queue(IterableMixin):
         return catalog._elements.popleft()
 
 class Stack(Queue):
-    def dequeue(self):
-        return self._elements.pop()
+    def dequeue(catalog):
+        return catalog._elements.pop()
+
+@dataclass(order=True)
+class Element:
+    priority: float
+    count : int
+    value : Any
+class MutableMinHeap(IterableMixin):
+    def __init__(catalog):
+        super().__init__()
+        catalog._elements_by_value = {}
+        catalog._elements = []
+        catalog._counter = count()
+
+    def __setitem__(catalog, unique_value, priority):
+        if unique_value in catalog._elements_by_value:
+            catalog._elements_by_value[unique_value].priority = priority
+            heapify(catalog._elements)
+        else:
+            element = Element(priority, next(catalog._counter), unique_value)
+            catalog._elements_by_value[unique_value] = element
+            heappush(catalog._elements, element)
+
+    def __getitem__(catalog, unique_value):
+        return catalog._elements_by_value[unique_value].priority
+
+    def dequeue(catalog):
+        return heappop(catalog._elements).value
+
 
 
 print("\n(1) List of Kitchen Utensils when washing the dishes. Using LAST IN FIRST OUT QUEUE. \n")
@@ -47,9 +80,9 @@ LIFO.append("- Glass")
 LIFO.append("- Saucer")
 
 
-print("\n(2) List of Kitchen Utensils when washing the dishes. Using LAST IN FIRST OUT QUEUE. \n")
-print(LIFO.pop())
-print(LIFO.pop())
-print(LIFO.pop())
-print(LIFO.pop())
-print(LIFO.pop())
+# print("\n(2) List of Kitchen Utensils when washing the dishes. Using LAST IN FIRST OUT QUEUE. \n")
+# print(LIFO.pop())
+# print(LIFO.pop())
+# print(LIFO.pop())
+# print(LIFO.pop())
+# print(LIFO.pop())
