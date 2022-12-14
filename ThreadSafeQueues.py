@@ -15,7 +15,6 @@ from rich.panel import Panel
 
 QUEUE_TYPES = {"fifo": Queue, "lifo": LifoQueue, "heap": PriorityQueue}
 
-#emojis for the program
 PRODUCTS = (
     ":balloon:",
     ":cookie:",
@@ -33,7 +32,8 @@ PRODUCTS = (
     ":thread:",
     ":yo-yo:",
 )
-#class for priority of the datas
+
+
 @dataclass(order=True)
 class Product:
     priority: int
@@ -54,7 +54,8 @@ PRIORITIZED_PRODUCTS = (
     Product(Priority.MEDIUM, ":2nd_place_medal:"),
     Product(Priority.LOW, ":3rd_place_medal:"),
 )
-#worker
+
+
 class Worker(threading.Thread):
     def __init__(self, speed, buffer):
         super().__init__(daemon=True)
@@ -84,7 +85,7 @@ class Worker(threading.Thread):
             sleep(delay / 100)
             self.progress += 1
 
-#producer
+
 class Producer(Worker):
     def __init__(self, speed, buffer, products):
         super().__init__(speed, buffer)
@@ -97,7 +98,7 @@ class Producer(Worker):
             self.buffer.put(self.product)
             self.simulate_idle()
 
-#consumer
+
 class Consumer(Worker):
     def run(self):
         while True:
@@ -105,6 +106,7 @@ class Consumer(Worker):
             self.simulate_work()
             self.buffer.task_done()
             self.simulate_idle()
+
 
 class View:
     def __init__(self, buffer, producers, consumers):
@@ -139,3 +141,48 @@ class View:
             right_panel = self.panel(consumer, f"Consumer {i}")
             rows.append(Columns([left_panel, right_panel], width=40))
         return Group(*rows)
+
+    def panel(self, worker, title):
+        if worker is None:
+            return ""
+        padding = " " * int(29 / 100 * worker.progress)
+        align = Align(padding + worker.state, align="left", vertical="middle")
+        return Panel(align, height=5, title=title)
+
+
+def main(args):
+    buffer = QUEUE_TYPES[args.queue]()
+    products = PRIORITIZED_PRODUCTS if args.queue == "heap" else PRODUCTS
+    producers = [
+        Producer(args.producer_speed, buffer, products)
+        for _ in range(args.producers)
+    ]
+    consumers = [
+        Consumer(args.consumer_speed, buffer) for _ in range(args.consumers)
+    ]
+
+    for producer in producers:
+        producer.start()
+
+    for consumer in consumers:
+        consumer.start()
+
+    view = View(buffer, producers, consumers)
+    view.animate()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-q", "--queue", choices=QUEUE_TYPES, default="fifo")
+    parser.add_argument("-p", "--producers", type=int, default=3)
+    parser.add_argument("-c", "--consumers", type=int, default=2)
+    parser.add_argument("-ps", "--producer-speed", type=int, default=1)
+    parser.add_argument("-cs", "--consumer-speed", type=int, default=1)
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    try:
+        main(parse_args())
+    except KeyboardInterrupt:
+        pass
