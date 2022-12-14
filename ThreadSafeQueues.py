@@ -15,6 +15,7 @@ from rich.panel import Panel
 
 QUEUE_TYPES = {"fifo": Queue, "lifo": LifoQueue, "heap": PriorityQueue}
 
+#emojis for the program
 PRODUCTS = (
     ":balloon:",
     ":cookie:",
@@ -32,7 +33,7 @@ PRODUCTS = (
     ":thread:",
     ":yo-yo:",
 )
-
+#class for priority of the datas
 @dataclass(order=True)
 class Product:
     priority: int
@@ -53,3 +54,54 @@ PRIORITIZED_PRODUCTS = (
     Product(Priority.MEDIUM, ":2nd_place_medal:"),
     Product(Priority.LOW, ":3rd_place_medal:"),
 )
+#worker
+class Worker(threading.Thread):
+    def __init__(self, speed, buffer):
+        super().__init__(daemon=True)
+        self.speed = speed
+        self.buffer = buffer
+        self.product = None
+        self.working = False
+        self.progress = 0
+
+    @property
+    def state(self):
+        if self.working:
+            return f"{self.product} ({self.progress}%)"
+        return ":zzz: Idle"
+
+    def simulate_idle(self):
+        self.product = None
+        self.working = False
+        self.progress = 0
+        sleep(randint(1, 3))
+
+    def simulate_work(self):
+        self.working = True
+        self.progress = 0
+        delay = randint(1, 1 + 15 // self.speed)
+        for _ in range(100):
+            sleep(delay / 100)
+            self.progress += 1
+
+#producer
+class Producer(Worker):
+    def __init__(self, speed, buffer, products):
+        super().__init__(speed, buffer)
+        self.products = products
+
+    def run(self):
+        while True:
+            self.product = choice(self.products)
+            self.simulate_work()
+            self.buffer.put(self.product)
+            self.simulate_idle()
+
+#consumer
+class Consumer(Worker):
+    def run(self):
+        while True:
+            self.product = self.buffer.get()
+            self.simulate_work()
+            self.buffer.task_done()
+            self.simulate_idle()
