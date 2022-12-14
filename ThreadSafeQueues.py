@@ -15,6 +15,7 @@ from rich.panel import Panel
 
 QUEUE_TYPES = {"fifo": Queue, "lifo": LifoQueue, "heap": PriorityQueue}
 
+#emojis for the program
 PRODUCTS = (
     ":balloon:",
     ":cookie:",
@@ -33,7 +34,7 @@ PRODUCTS = (
     ":yo-yo:",
 )
 
-
+#class for priority of datas
 @dataclass(order=True)
 class Product:
     priority: int
@@ -55,7 +56,7 @@ PRIORITIZED_PRODUCTS = (
     Product(Priority.LOW, ":3rd_place_medal:"),
 )
 
-
+#worker
 class Worker(threading.Thread):
     def __init__(self, speed, buffer):
         super().__init__(daemon=True)
@@ -85,7 +86,7 @@ class Worker(threading.Thread):
             sleep(delay / 100)
             self.progress += 1
 
-
+#producer
 class Producer(Worker):
     def __init__(self, speed, buffer, products):
         super().__init__(speed, buffer)
@@ -98,7 +99,7 @@ class Producer(Worker):
             self.buffer.put(self.product)
             self.simulate_idle()
 
-
+#consumer
 class Consumer(Worker):
     def run(self):
         while True:
@@ -107,7 +108,7 @@ class Consumer(Worker):
             self.buffer.task_done()
             self.simulate_idle()
 
-
+#for the shell 
 class View:
     def __init__(self, buffer, producers, consumers):
         self.buffer = buffer
@@ -149,7 +150,7 @@ class View:
         align = Align(padding + worker.state, align="left", vertical="middle")
         return Panel(align, height=5, title=title)
 
-
+#added main for animation of the emojis
 def main(args):
     buffer = QUEUE_TYPES[args.queue]()
     products = PRIORITIZED_PRODUCTS if args.queue == "heap" else PRODUCTS
@@ -170,7 +171,7 @@ def main(args):
     view = View(buffer, producers, consumers)
     view.animate()
 
-
+#parse for scripts injected through powershell
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-q", "--queue", choices=QUEUE_TYPES, default="fifo")
