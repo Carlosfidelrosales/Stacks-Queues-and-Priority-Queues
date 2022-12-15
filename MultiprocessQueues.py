@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import argparse
 import queue
 import time
+POISON_PILL = None
 
 class Combinations:
     def __init__(self, alphabet, length):
@@ -61,6 +62,9 @@ class Worker(multiprocessing.Process):
     def run(self):
         while True:
             job = self.queue_in.get()
+            if job is POISON_PILL:
+                self.queue_in.put(POISON_PILL)
+                break
             if plaintext := job(self.hash_value):
                 self.queue_out.put(plaintext)
                 break
@@ -77,10 +81,6 @@ class Job:
             hashed = md5(text_bytes).hexdigest()
             if hashed == hash_value:
                 return text_bytes.decode("utf-8")
-
-import argparse
-
-# ...
 
 def main(args):
     t1 = time.perf_counter()
@@ -99,6 +99,9 @@ def main(args):
         combinations = Combinations(ascii_lowercase, text_length)
         for indices in chunk_indices(len(combinations), len(workers)):
             queue_in.put(Job(combinations, *indices))
+
+    queue_in.put(POISON_PILL)
+
     while any(worker.is_alive() for worker in workers):
         try:
             solution = queue_out.get(timeout=0.1)
