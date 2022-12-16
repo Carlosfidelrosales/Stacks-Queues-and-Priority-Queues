@@ -7,3 +7,4 @@ while True:
         topic="datascience",
         value=message.encode("utf-8"),
     )
+    
