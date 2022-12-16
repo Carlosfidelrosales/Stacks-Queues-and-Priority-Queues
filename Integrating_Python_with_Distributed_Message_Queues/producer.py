@@ -3,22 +3,13 @@ import pika
 QUEUE_NAME = "mailbox"
 
 
-# with pika.BlockingConnection() as connection:
-#     channel = connection.channel()
-#     channel.queue_declare(queue=QUEUE_NAME)
-#     while True:
-#         message = input("Message: ")
-#         channel.basic_publish(
-#             exchange="",
-#             routing_key=QUEUE_NAME,
-#             body=message.encode("utf-8")
-#         )
-from kafka import KafkaProducer
-
-producer = KafkaProducer(bootstrap_servers="localhost:9092")
-while True:
-    message = input("Message: ")
-    producer.send(
-        topic="datascience",
-        value=message.encode("utf-8"),
-    )
+with pika.BlockingConnection() as connection:
+    channel = connection.channel()
+    channel.queue_declare(queue=QUEUE_NAME)
+    while True:
+        message = input("Message: ")
+        channel.basic_publish(
+            exchange="",
+            routing_key=QUEUE_NAME,
+            body=message.encode("utf-8")
+        )
